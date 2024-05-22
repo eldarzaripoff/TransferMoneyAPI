@@ -14,6 +14,10 @@ public class TransferRepository {
         return operationId;
     }
 
+    public boolean checkOperationId(String operationId) {
+        return transferRequests.get(operationId) != null;
+    }
+
     public TransferRequest getTransferRequest(String operationId) {
         return transferRequests.get(operationId);
     }

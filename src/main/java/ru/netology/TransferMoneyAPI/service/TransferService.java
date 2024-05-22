@@ -32,6 +32,10 @@ public class TransferService {
         return transferRequest;
     }
 
+    public boolean checkOperationId(String operationId) {
+        return transferRepository.checkOperationId(operationId);
+    }
+
     public void deleteTransferRequest(String operationId) {
         transferRepository.deleteTransferRequest(operationId);
     }
