@@ -32,32 +32,28 @@ public class TransferService {
             String operationId = transferRepository.save(transferRequest);
             logTransferOperation(operationId, transferRequest.getCardFromNumber(), transferRequest.getCardToNumber(), transferRequest.getAmount(), "Success");
             return operationId;
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             logTransferOperation(null, transferRequest.getCardFromNumber(), transferRequest.getCardToNumber(), transferRequest.getAmount(), "Error: " + e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ошибка при сохранении запроса на перевод");
         }
     }
 
     public TransferRequest getTransferRequest(String operationId) {
-        try {
+
             TransferRequest transferRequest = transferRepository.getTransferRequest(operationId);
             if (transferRequest == null) {
                 log.warn("Не найден запрос на перевод с ID: {}", operationId);
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Transfer request not found");
             }
+
             log.trace("Найден запрос на перевод с ID: {}", operationId);
             return transferRequest;
-        } catch (Exception e) {
-            log.error("Ошибка при получении запроса на перевод: {}", e.getMessage(), e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ошибка при получении запроса на перевод");
-        }
-
     }
 
     public boolean checkOperationId(String operationId) {
         try {
             return transferRepository.getTransferRequest(operationId) != null;
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.error("Ошибка при проверке операции: {}", e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ошибка при проверке операции");
         }
@@ -67,11 +63,7 @@ public class TransferService {
         LocalDateTime now = LocalDateTime.now();
         String logEntry = "Operation ID: " + operationId + "\n" + "Data and time: " + dateTimeFormatter.format(now) + "\n"
                 + "cardFromNumber: " + cardFromNumber + "\n" + "cardToNumber: " + cardToNumber
-                + "\n" + "amount: " + amount.getValue() + " " + amount.getValue() + "\n" + result;
+                + "\n" + "amount: " + amount.getValue() + " " + amount.getCurrency() + "\n" + result;
         log.info(logEntry);
-    }
-
-    public void deleteTransferRequest(String operationId) {
-        transferRepository.deleteTransferRequest(operationId);
     }
 }

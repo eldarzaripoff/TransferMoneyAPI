@@ -26,8 +26,4 @@ public class TransferRepository {
         log.trace("Найден запрос на перевод с ID: {}", operationId);
         return transferRequests.get(operationId);
     }
-
-    public void deleteTransferRequest(String operationId) {
-        transferRequests.remove(operationId);
-    }
 }

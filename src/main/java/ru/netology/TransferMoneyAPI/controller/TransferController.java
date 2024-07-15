@@ -47,7 +47,7 @@ public class TransferController {
             errorResponse.put("message", ex.getReason());
             errorResponse.put("id", ex.getStatusCode().value());
             return ResponseEntity.status(ex.getStatusCode()).body(errorResponse);
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
             log.error("Внутренняя ошибка при обработке запроса на перевод: {}", ex.getMessage(), ex);
             Map<String, Object> errorResponse = new ConcurrentHashMap<>();
             errorResponse.put("message", "Error during transfer");
@@ -79,10 +79,10 @@ public class TransferController {
             errorResponse.put("message", ex.getReason());
             errorResponse.put("id", ex.getStatusCode().value());
             return ResponseEntity.status(ex.getStatusCode()).body(errorResponse);
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
             log.error("Внутренняя ошибка при обработке запроса на подтверждение операции: {}", ex.getMessage(), ex);
             Map<String, Object> errorResponse = new ConcurrentHashMap<>();
-            errorResponse.put("message", "Error during transfer");
+            errorResponse.put("message", "Error during confirm");
             errorResponse.put("id", HttpStatus.INTERNAL_SERVER_ERROR.value());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
