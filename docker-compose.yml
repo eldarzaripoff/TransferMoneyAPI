@@ -1,0 +1,21 @@
+version: '3'
+services:
+  rest-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+
+  front:
+    build:
+      context: ../card-transfer-master
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+        - rest-service

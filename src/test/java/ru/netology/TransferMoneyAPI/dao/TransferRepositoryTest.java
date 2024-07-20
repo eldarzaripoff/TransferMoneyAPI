@@ -4,21 +4,15 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.netology.TransferMoneyAPI.models.Amount;
 import ru.netology.TransferMoneyAPI.models.TransferRequest;
 
-import java.util.Map;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 class TransferRepositoryTest {
-    @Mock
-    private Map<String, TransferRequest> transferRequests;
 
     @InjectMocks
     private TransferRepository transferRepository;
@@ -37,15 +31,14 @@ class TransferRepositoryTest {
         assertNotNull(operationId);
         assertNotEquals("", operationId);
     }
+
     @Test
     void getTransferRequest_shouldReturnTransferRequestWhenExists() {
         // Arrange
-        String operationId = "123456";
         TransferRequest expectedTransferRequest = new TransferRequest("2202123443215555",
                 "0224", "963", "9876678955556464",
                 new Amount(5000, "USD"));
-        //transferRequests.put(operationId, expectedTransferRequest);
-        Mockito.when(transferRequests.get(operationId)).thenReturn(expectedTransferRequest);
+        String operationId = transferRepository.save(expectedTransferRequest);
 
         // Act
         TransferRequest actualTransferRequest = transferRepository.getTransferRequest(operationId);
@@ -66,6 +59,4 @@ class TransferRepositoryTest {
         // Assert
         Assertions.assertNull(actualTransferRequest);
     }
-
-
 }
