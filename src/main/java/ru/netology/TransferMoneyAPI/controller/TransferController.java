@@ -1,5 +1,6 @@
 package ru.netology.TransferMoneyAPI.controller;
 
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class TransferController {
     }
 
     @PostMapping("/transfer")
-    public ResponseEntity<Map<String, Object>> transferMoney(@RequestBody TransferDTO transferDTO) {
+    public ResponseEntity<Map<String, Object>> transferMoney(@Valid @RequestBody TransferDTO transferDTO) {
         try {
             log.info("Получен запрос на перевод: {}", transferDTO.toString());
             TransferRequest transferRequest = Mapper.toTransferRequest(transferDTO);
@@ -56,7 +57,7 @@ public class TransferController {
         }
     }
     @PostMapping("/confirmOperation")
-    public ResponseEntity<Map<String, Object>> confirmTransfer(@RequestBody ConfirmationDTO confirmationDTO) {
+    public ResponseEntity<Map<String, Object>> confirmTransfer(@Valid @RequestBody ConfirmationDTO confirmationDTO) {
         try {
             log.info("Получен запрос на подтверждение операции: {}", confirmationDTO.toString());
             ConfirmOperationRequest confirmOperationRequest = Mapper.toConfirmOperationRequest(confirmationDTO);
